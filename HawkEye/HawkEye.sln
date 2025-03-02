@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35825.156 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HawkEye", "HawkEye.csproj", "{12B00E70-CE64-4070-BECB-9E1D8AE71439}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12B00E70-CE64-4070-BECB-9E1D8AE71439}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12B00E70-CE64-4070-BECB-9E1D8AE71439}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12B00E70-CE64-4070-BECB-9E1D8AE71439}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12B00E70-CE64-4070-BECB-9E1D8AE71439}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {ADD907C9-559A-475E-B591-2C31B165AD60}
+	EndGlobalSection
+EndGlobal
