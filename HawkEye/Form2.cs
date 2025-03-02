@@ -15,15 +15,19 @@ namespace HawkEye
 {
     public partial class Form2 : Form
     {
-        private List<WindowEnumerator2.WindowInfo> windows;
+        //private List<WindowEnumerator2.WindowInfo> windows;
+        //private List<WindowEnumerator3.WindowInfo> windows;
+        private List<WindowEnumerator4.WindowInfo> windows;
         private IntPtr hookID = IntPtr.Zero;
         private IntPtr mainWindowHandle;
         private bool isUpdating = false; // フラグを追加
+        private WinEventDelegate winEventDelegate;
 
         public Form2()
         {
             Console.WriteLine("Form2");
             InitializeComponent();
+            winEventDelegate = new WinEventDelegate(WinEventProc);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -31,8 +35,9 @@ namespace HawkEye
             Console.WriteLine("OnLoad");
             base.OnLoad(e);
             mainWindowHandle = this.Handle; // 自分自身のウィンドウハンドルを取得
-            hookID = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, WinEventProc, 0, 0, WINEVENT_OUTOFCONTEXT);
-            UpdateWindowList();
+            //hookID = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, WinEventProc, 0, 0, WINEVENT_OUTOFCONTEXT);
+            hookID = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, winEventDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
+            //UpdateWindowList();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
@@ -61,7 +66,9 @@ namespace HawkEye
             treeView1.Nodes.Clear();
             Console.WriteLine("UpdateWindowList:1");
             // WindowEnumerator2 クラスを使用してウィンドウ一覧を取得
-            windows = WindowEnumerator2.GetVisibleWindows();
+            //windows = WindowEnumerator2.GetVisibleWindows();
+            //windows = WindowEnumerator3.GetVisibleWindows();
+            windows = WindowEnumerator4.GetTaskbarWindows();
             Console.WriteLine("UpdateWindowList:2");
 
             // TreeView にウィンドウ一覧を追加
@@ -80,7 +87,8 @@ namespace HawkEye
         {
             if (e.Node != null && e.Node.Tag is IntPtr hWnd)
             {
-                WindowEnumerator2.FocusWindow(hWnd);
+                //WindowEnumerator2.FocusWindow(hWnd);
+                WindowEnumerator3.FocusWindow(hWnd);
             }
         }
 
