@@ -13,6 +13,8 @@ namespace HawkEye
 {
     public partial class Form1 : Form
     {
+        private List<WindowEnumerator2.WindowInfo> windows;
+
         public Form1()
         {
             InitializeComponent();
@@ -38,15 +40,22 @@ namespace HawkEye
         {
             listBox1.Items.Clear();
 
-            // WindowEnumerator クラスを使用してウィンドウ一覧を取得
-            //string[] windows = WindowEnumerator.GetVisibleWindows();
-            //string[] windows = WindowEnumerator.GetVisibleWindows2();
-            string[] windows = WindowEnumerator2.GetVisibleWindows();
+            // WindowEnumerator2 クラスを使用してウィンドウ一覧を取得
+            windows = WindowEnumerator2.GetVisibleWindows();
 
             // リストボックスにウィンドウ一覧を追加
             foreach (var window in windows)
             {
-                listBox1.Items.Add(window);
+                listBox1.Items.Add($"Start Time: {window.StartTime.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Title: {window.Title}");
+            }
+        }
+
+        private void listBox1_DoubleClick(object sender, EventArgs e)
+        {
+            if (listBox1.SelectedIndex != -1)
+            {
+                var selectedWindow = windows[listBox1.SelectedIndex];
+                WindowEnumerator2.FocusWindow(selectedWindow.HWnd);
             }
         }
     }

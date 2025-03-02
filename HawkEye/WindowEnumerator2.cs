@@ -30,12 +30,24 @@ namespace HawkEye
         [DllImport("user32.dll")]
         private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
+        // SetForegroundWindow 関数（ウィンドウにフォーカスを当てる）
+        [DllImport("user32.dll")]
+        private static extern bool SetForegroundWindow(IntPtr hWnd);
+
         // コールバック関数の定義
         private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
 
-        public static string[] GetVisibleWindows()
+        // ウィンドウ情報を保持するクラス
+        public class WindowInfo
         {
-            List<string> windowList = new List<string>();
+            public string Title { get; set; }
+            public DateTime StartTime { get; set; }
+            public IntPtr HWnd { get; set; }
+        }
+
+        public static List<WindowInfo> GetVisibleWindows()
+        {
+            List<WindowInfo> windowList = new List<WindowInfo>();
 
             // ウィンドウを列挙
             EnumWindows((hWnd, lParam) =>
@@ -54,16 +66,27 @@ namespace HawkEye
                         // プロセスの開始時刻を取得
                         Process process = Process.GetProcessById((int)processId);
                         DateTime startTime = process.StartTime;
-                        string startTimeFormatted = startTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
 
-                        windowList.Add($"Title: {windowTitle}, Start Time: {startTimeFormatted}");
+                        windowList.Add(new WindowInfo
+                        {
+                            Title = windowTitle.ToString(),
+                            StartTime = startTime,
+                            HWnd = hWnd
+                        });
                     }
                 }
                 return true;  // 次のウィンドウへ
             }, IntPtr.Zero);
 
-            return windowList.ToArray();
+            // 開始日時で降順にソート
+            windowList = windowList.OrderByDescending(w => w.StartTime).ToList();
+
+            return windowList;
+        }
+
+        public static bool FocusWindow(IntPtr hWnd)
+        {
+            return SetForegroundWindow(hWnd);
         }
     }
 }
-
