@@ -1,0 +1,10 @@
+D:\dev\HawkEye\HawkEye\bin\Debug\HawkEye.exe.config
+D:\dev\HawkEye\HawkEye\bin\Debug\HawkEye.exe
+D:\dev\HawkEye\HawkEye\bin\Debug\HawkEye.pdb
+D:\dev\HawkEye\HawkEye\obj\Debug\HawkEye.csproj.AssemblyReference.cache
+D:\dev\HawkEye\HawkEye\obj\Debug\HawkEye.Properties.Resources.resources
+D:\dev\HawkEye\HawkEye\obj\Debug\HawkEye.csproj.GenerateResource.cache
+D:\dev\HawkEye\HawkEye\obj\Debug\HawkEye.csproj.CoreCompileInputs.cache
+D:\dev\HawkEye\HawkEye\obj\Debug\HawkEye.exe
+D:\dev\HawkEye\HawkEye\obj\Debug\HawkEye.pdb
+D:\dev\HawkEye\HawkEye\obj\Debug\HawkEye.Form1.resources
