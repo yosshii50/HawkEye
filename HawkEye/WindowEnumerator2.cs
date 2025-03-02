@@ -45,13 +45,22 @@ namespace HawkEye
             public IntPtr HWnd { get; set; }
         }
 
+        private int LastWinCount = 0; // 最後のウィンドウ数
+
         public static List<WindowInfo> GetVisibleWindows()
         {
+            Console.WriteLine("GetVisibleWindows:Start");
+            
+            Console.WriteLine("GetVisibleWindows:1");
+            int Idx = 0; // フラグを追加
+
             List<WindowInfo> windowList = new List<WindowInfo>();
+            //Console.WriteLine("ウィンドウの件数: " + windowList.Count);
 
             // ウィンドウを列挙
             EnumWindows((hWnd, lParam) =>
             {
+                Console.WriteLine("GetVisibleWindows:2-" + (Idx++));
                 if (IsWindowVisible(hWnd))  // 可視ウィンドウのみ
                 {
                     int length = GetWindowTextLength(hWnd);
@@ -77,10 +86,12 @@ namespace HawkEye
                 }
                 return true;  // 次のウィンドウへ
             }, IntPtr.Zero);
+            Console.WriteLine("GetVisibleWindows:3");
 
             // 開始日時で降順にソート
             windowList = windowList.OrderByDescending(w => w.StartTime).ToList();
 
+            Console.WriteLine("GetVisibleWindows:End");
             return windowList;
         }
 
