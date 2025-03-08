@@ -111,5 +111,11 @@ namespace HawkEye
         private static extern bool UnhookWinEvent(IntPtr hWinEventHook);
 
         private delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            TreeView_test treeViewForm = new TreeView_test();
+            treeViewForm.Show();
+        }
     }
 }
