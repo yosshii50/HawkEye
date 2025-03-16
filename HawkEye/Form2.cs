@@ -57,7 +57,7 @@ namespace HawkEye
             UpdateWindowList();
         }
 
-        private void UpdateWindowList()
+        private void UpdateWindowList2()
         {
             if (isUpdating) return; // フラグが立っている場合は処理をスキップ
 
@@ -82,6 +82,51 @@ namespace HawkEye
             Console.WriteLine("UpdateWindowList:End");
             isUpdating = false; // フラグを下ろす
         }
+        private async void UpdateWindowList()
+        {
+            if (isUpdating) return; // フラグが立っている場合は処理をスキップ
+
+            isUpdating = true; // フラグを立てる
+            Console.WriteLine($"UpdateWindowList:Start {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}");
+
+            /*
+            // 非同期タスクでウィンドウ一覧を取得
+            var windows = await Task.Run(() =>
+            {
+                Console.WriteLine($"UpdateWindowList:1 {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}");
+                // WindowEnumerator2 クラスを使用してウィンドウ一覧を取得
+                //windows = WindowEnumerator2.GetVisibleWindows();
+                //windows = WindowEnumerator3.GetVisibleWindows();
+                return WindowEnumerator4.GetTaskbarWindows();
+            });
+            */
+
+            //Console.WriteLine($"UpdateWindowList:2 {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}");
+
+            // UIスレッドでTreeViewを更新
+            treeView1.BeginInvoke(new Action(() =>
+            {
+                windows = WindowEnumerator4.GetTaskbarWindows();
+
+                Console.WriteLine($"UpdateWindowList:4 {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}");
+                treeView1.Nodes.Clear();
+
+                Console.WriteLine($"UpdateWindowList:5 {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}");
+                // TreeView にウィンドウ一覧を追加
+                foreach (var window in windows)
+                {
+                    TreeNode node = new TreeNode($"Start Time: {window.StartTime.ToString("yyyy-MM-dd HH:mm:ss.fff")} - Title: {window.Title} / {window.HWnd}");
+                    node.Tag = window.HWnd; // ウィンドウハンドルをタグに保存
+                    treeView1.Nodes.Add(node);
+                }
+
+                Console.WriteLine($"UpdateWindowList:END {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}");
+                isUpdating = false; // フラグを下ろす
+            }));
+
+            Console.WriteLine($"UpdateWindowList:3 {DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}");
+        }
+
 
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {

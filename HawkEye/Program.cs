@@ -17,8 +17,8 @@ namespace HawkEye
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1()); // こっちはもう使わない
-            //Application.Run(new Form2());
-            Application.Run(new TreeView_test());
+            Application.Run(new Form2());
+            //Application.Run(new TreeView_test());
         }
     }
 }
