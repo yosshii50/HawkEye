@@ -34,5 +34,17 @@ namespace HawkEye.Properties {
                 this["UserName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TreeViewData {
+            get {
+                return ((string)(this["TreeViewData"]));
+            }
+            set {
+                this["TreeViewData"] = value;
+            }
+        }
     }
 }

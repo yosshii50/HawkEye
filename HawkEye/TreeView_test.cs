@@ -13,25 +13,119 @@ namespace HawkEye
     public partial class TreeView_test : Form
     {
         private TreeNode testUsernameNode;
+        private ContextMenuStrip treeViewContextMenu;
+        private TreeNode previousTargetNode = null;
+        private TreeNode previousDraggedNode = null;
+
+
 
         public TreeView_test()
         {
             InitializeComponent();
-            InitializeTreeView();
+            //InitializeTreeView();
             InitializeTreeViewDragAndDrop();
+            InitializeContextMenu();
             load_setting();
-            //this.FormClosing += new FormClosingEventHandler(TreeView_test_FormClosing);
-            treeView1.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(treeView1_NodeMouseDoubleClick);
+            this.FormClosing += new FormClosingEventHandler(TreeView_test_FormClosing);
+            //treeView1.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(treeView1_NodeMouseDoubleClick);
             treeView1.AfterLabelEdit += new NodeLabelEditEventHandler(treeView1_AfterLabelEdit);
+        }
+
+        // コンテキストメニューの初期化
+        private void InitializeContextMenu()
+        {
+            treeViewContextMenu = new ContextMenuStrip();
+            ToolStripMenuItem addItemMenuItem = new ToolStripMenuItem("項目の追加");
+            ToolStripMenuItem addFolderMenuItem = new ToolStripMenuItem("フォルダの追加");
+            ToolStripMenuItem renameMenuItem = new ToolStripMenuItem("名前の変更");
+
+            addItemMenuItem.Click += new EventHandler(AddItemMenuItem_Click);
+            addFolderMenuItem.Click += new EventHandler(AddFolderMenuItem_Click);
+            renameMenuItem.Click += new EventHandler(RenameMenuItem_Click);
+
+            treeViewContextMenu.Items.AddRange(new ToolStripItem[] { 
+                addItemMenuItem,
+                addFolderMenuItem, 
+                renameMenuItem,
+            });
+            treeView1.ContextMenuStrip = treeViewContextMenu;
+        }
+
+        private void AddItemMenuItem_Click(object sender, EventArgs e)
+        {
+            // 項目の追加処理をここに記述
+        }
+
+        private void AddFolderMenuItem_Click(object sender, EventArgs e)
+        {
+
+            TreeNode selectedNode = treeView1.SelectedNode;
+            TreeNode newNode = new TreeNode("New");
+            if (selectedNode != null)
+            {
+                selectedNode.Nodes.Add(newNode);
+                selectedNode.Expand();
+            }
+            else
+            {
+                treeView1.Nodes.Add(newNode);
+            }
+
+        }
+
+        // 名前の変更
+        private void RenameMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = treeView1.SelectedNode;
+            if (selectedNode != null)
+            {
+                selectedNode.BeginEdit();
+            }
         }
 
         // 設定情報の取得
         private void load_setting()
         {
+            //string test_username = Properties.Settings.Default.UserName;
+            //testUsernameNode = new TreeNode(test_username);
+            //treeView1.Nodes.Add(testUsernameNode);
+
             string test_username = Properties.Settings.Default.UserName;
             testUsernameNode = new TreeNode(test_username);
             treeView1.Nodes.Add(testUsernameNode);
+
+            string serializedTreeView = Properties.Settings.Default.TreeViewData;
+            if (!string.IsNullOrEmpty(serializedTreeView))
+            {
+                DeserializeTreeView(treeView1, serializedTreeView);
+            }
+            // 全てのノードを展開
+            treeView1.ExpandAll();
+
+
         }
+
+        // ツリービューの内容をシリアライズ
+        private string SerializeTreeView(TreeView treeView)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (TreeNode node in treeView.Nodes)
+            {
+                SerializeNode(node, sb, 0);
+            }
+            return sb.ToString();
+        }
+
+        // ノードをシリアライズ
+        private void SerializeNode(TreeNode node, StringBuilder sb, int level)
+        {
+            sb.AppendLine(new string(' ', level * 2) + node.Text);
+            foreach (TreeNode childNode in node.Nodes)
+            {
+                SerializeNode(childNode, sb, level + 1);
+            }
+        }
+
 
         //// フォーム終了時に設定を保存
         //private void TreeView_test_FormClosing(object sender, FormClosingEventArgs e)
@@ -45,18 +139,20 @@ namespace HawkEye
         {
             // ノードを追加
             TreeNode rootNode1 = new TreeNode("Root Node1");
-            rootNode1.Nodes.Add("Child Node 1");
-            rootNode1.Nodes.Add("Child Node 2");
+            rootNode1.Nodes.Add("Child Node 1-1");
+            rootNode1.Nodes.Add("Child Node 1-2");
+            rootNode1.Nodes.Add("Child Node 1-3");
 
             TreeNode rootNode2 = new TreeNode("Root Node2");
-            rootNode2.Nodes.Add("Child Node 1");
-            rootNode2.Nodes.Add("Child Node 2");
+            rootNode2.Nodes.Add("Child Node 2-1");
+            rootNode2.Nodes.Add("Child Node 2-2");
+            rootNode2.Nodes.Add("Child Node 2-3");
             rootNode1.Nodes.Add(rootNode2);
 
             treeView1.Nodes.Add(rootNode1);
 
             // 全てのノードを展開
-            treeView1.ExpandAll();
+            //treeView1.ExpandAll();
         }
 
         private void InitializeTreeViewDragAndDrop()
@@ -66,17 +162,22 @@ namespace HawkEye
             treeView1.DragEnter += new DragEventHandler(treeView1_DragEnter);
             treeView1.DragOver += new DragEventHandler(treeView1_DragOver);
             treeView1.DragDrop += new DragEventHandler(treeView1_DragDrop);
+            treeView1.DragLeave += new EventHandler(treeView1_DragLeave); // ドラッグがキャンセルされた場合の処理を追加
         }
 
+        // ドラッグ開始
         private void treeView1_ItemDrag(object sender, ItemDragEventArgs e)
         {
-            TreeNode draggedNode = e.Item as TreeNode;
-            if (draggedNode != null && draggedNode.Text != "Root Node1")
+            previousDraggedNode = e.Item as TreeNode;
+            if (previousDraggedNode != null && previousDraggedNode.Text != "Root Node1")
             {
+                //previousDraggedNode.BackColor = Color.LightGreen; // ドラッグしているノードの色を変更
+                //treeView1.SelectedNode = previousDraggedNode; // 移動中のノードにフォーカスを当てる
                 DoDragDrop(e.Item, DragDropEffects.Move);
             }
         }
 
+        // ドラッグ中
         private void treeView1_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(TreeNode)))
@@ -89,11 +190,26 @@ namespace HawkEye
             }
         }
 
+        // ドラッグ中
         private void treeView1_DragOver(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(TreeNode)))
             {
                 e.Effect = DragDropEffects.Move;
+
+                Point pt = ((TreeView)sender).PointToClient(new Point(e.X, e.Y));
+                TreeNode targetNode = ((TreeView)sender).GetNodeAt(pt);
+
+                if (previousTargetNode != null && previousTargetNode != targetNode)
+                {
+                    previousTargetNode.BackColor = treeView1.BackColor; // 前回のドロップ対象ノードの色を元に戻す
+                }
+
+                if (targetNode != null && targetNode != previousTargetNode)
+                {
+                    targetNode.BackColor = Color.LightBlue; // ドロップ対象ノードの色を変更
+                    previousTargetNode = targetNode;
+                }
             }
             else
             {
@@ -101,6 +217,7 @@ namespace HawkEye
             }
         }
 
+        // ドロップ
         private void treeView1_DragDrop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(typeof(TreeNode)))
@@ -111,20 +228,35 @@ namespace HawkEye
 
                 if (targetNode != null && newNode != targetNode && !ContainsNode(newNode, targetNode))
                 {
+                    
+                    Console.WriteLine("ドロップ先: " + targetNode.Text);
+
+                    // ドラッグしているノードの色を元に戻す
+                    if (previousDraggedNode != null)
+                    {
+                        Console.WriteLine("previousDraggedNode: " + previousDraggedNode.Text);
+                    //    previousDraggedNode.BackColor = treeView1.BackColor;
+                    //    previousDraggedNode = null;
+                    }
+
                     newNode.Remove();
-                    if (targetNode.Parent == null)
-                    {
-                        treeView1.Nodes.Insert(targetNode.Index, newNode);
-                    }
-                    else
-                    {
-                        targetNode.Parent.Nodes.Insert(targetNode.Index, newNode);
-                    }
+                    targetNode.Nodes.Add(newNode);
+                    targetNode.Expand();
                     newNode.EnsureVisible();
+                    treeView1.SelectedNode = newNode; // 移動したノードにフォーカスを当てる
+
+                    // ドロップ後に色を元に戻す
+                    if (previousTargetNode != null)
+                    {
+                        Console.WriteLine("previousTargetNode: " + previousTargetNode.Text);
+                        previousTargetNode.BackColor = treeView1.BackColor;
+                        previousTargetNode = null;
+                    }
                 }
             }
         }
 
+        // ノードが含まれているか
         private bool ContainsNode(TreeNode node1, TreeNode node2)
         {
             if (node2.Parent == null) return false;
@@ -132,27 +264,89 @@ namespace HawkEye
             return ContainsNode(node1, node2.Parent);
         }
 
+        // ノードが選択された時の処理
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             Console.WriteLine("Selected Node: " + e.Node.Text);
         }
 
-        // ノードのラベルを編集可能にする
-        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            e.Node.BeginEdit();
-        }
+        //// ノードのラベルを編集可能にする
+        //private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        //{
+        //    e.Node.BeginEdit();
+        //}
 
         // ノードのラベル編集後の処理
         private void treeView1_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
             if (e.Node == testUsernameNode && e.Label != null)
             {
-                string currentTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                Properties.Settings.Default.UserName = e.Label + currentTime;
+                //string currentTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); // デバッグ用に現在時刻を追加
+                //Properties.Settings.Default.UserName = e.Label + currentTime;
+                Properties.Settings.Default.UserName = e.Label;
                 Properties.Settings.Default.Save();
+                Console.WriteLine("設定に保存" + e.Label);
             }
         }
+
+        // ドラッグがキャンセルされた場合
+        private void treeView1_DragLeave(object sender, EventArgs e)
+        {
+            if (previousTargetNode != null)
+            {
+                previousTargetNode.BackColor = treeView1.BackColor;
+                previousTargetNode = null;
+            }
+
+            //if (previousDraggedNode != null)
+            //{
+            //    previousDraggedNode.BackColor = treeView1.BackColor;
+            //    previousDraggedNode = null;
+            //}
+        }
+
+        // フォーム終了時に設定を保存
+        private void TreeView_test_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            string serializedTreeView = SerializeTreeView(treeView1);
+            Properties.Settings.Default.TreeViewData = serializedTreeView;
+            Properties.Settings.Default.Save();
+        }
+
+        // フォームがロードされた時に設定を読み込む
+        private void DeserializeTreeView(TreeView treeView, string data)
+        {
+            treeView.Nodes.Clear();
+            string[] lines = data.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            Stack<TreeNode> stack = new Stack<TreeNode>();
+            foreach (string line in lines)
+            {
+                if (string.IsNullOrWhiteSpace(line)) continue;
+                int level = line.TakeWhile(char.IsWhiteSpace).Count() / 2;
+                TreeNode newNode = new TreeNode(line.Trim());
+                if (stack.Count == 0)
+                {
+                    treeView.Nodes.Add(newNode);
+                }
+                else
+                {
+                    while (stack.Count > level)
+                    {
+                        stack.Pop();
+                    }
+                    if (stack.Count > 0)
+                    {
+                        stack.Peek().Nodes.Add(newNode);
+                    }
+                    else
+                    {
+                        treeView.Nodes.Add(newNode);
+                    }
+                }
+                stack.Push(newNode);
+            }
+        }
+
     }
 }
 
