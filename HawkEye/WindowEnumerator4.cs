@@ -50,6 +50,12 @@ namespace HawkEye
                 // IntPtr hWnd = process.MainWindowHandle;
                 // int processId = process.Id;
 
+
+                // キャッシュを使わずに全部再取得するコマンドが必要
+                // 処理中に再取得があった場合、最後にもう一度処理する必要がある
+                // プロセスIDが変わらず Windowsが表示される場合があるのでは？
+
+
                 //IntPtr hWnd;
                 WindowInfo windowInfo;
                 //if (!processWindowHandleCache.TryGetValue(process.Id, out hWnd))

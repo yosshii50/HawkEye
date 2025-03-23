@@ -37,7 +37,7 @@ namespace HawkEye
             mainWindowHandle = this.Handle; // 自分自身のウィンドウハンドルを取得
             //hookID = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, WinEventProc, 0, 0, WINEVENT_OUTOFCONTEXT);
             hookID = SetWinEventHook(EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND, IntPtr.Zero, winEventDelegate, 0, 0, WINEVENT_OUTOFCONTEXT);
-            //UpdateWindowList();
+            UpdateWindowList();
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
