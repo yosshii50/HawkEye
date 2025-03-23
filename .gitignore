@@ -1,4 +1,11 @@
 bin/
+!/HawkEye/bin/
+/HawkEye/bin/*
+!/HawkEye/bin/Debug/
+/HawkEye/bin/Debug/*
+!/HawkEye/bin/Debug/HawkEye.exe
+!/HawkEye/bin/Debug/HawkEye.exe.config
+!/HawkEye/bin/Debug/Newtonsoft.Json.dll
 obj/
 *.user
 *.suo
