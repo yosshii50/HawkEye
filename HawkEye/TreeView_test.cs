@@ -12,13 +12,12 @@ namespace HawkEye
 {
     public partial class TreeView_test : Form
     {
-        private TreeNode testUsernameNode;
+        //private TreeNode testUsernameNode;
         private ContextMenuStrip treeViewContextMenu;
         private TreeNode previousTargetNode = null;
         private TreeNode previousDraggedNode = null;
 
-
-
+        // コンストラクタ
         public TreeView_test()
         {
             InitializeComponent();
@@ -28,29 +27,54 @@ namespace HawkEye
             load_setting();
             this.FormClosing += new FormClosingEventHandler(TreeView_test_FormClosing);
             //treeView1.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(treeView1_NodeMouseDoubleClick);
-            treeView1.AfterLabelEdit += new NodeLabelEditEventHandler(treeView1_AfterLabelEdit);
+            //treeView1.AfterLabelEdit += new NodeLabelEditEventHandler(treeView1_AfterLabelEdit);
         }
 
         // コンテキストメニューの初期化
         private void InitializeContextMenu()
         {
             treeViewContextMenu = new ContextMenuStrip();
-            ToolStripMenuItem addItemMenuItem = new ToolStripMenuItem("項目の追加");
+            //ToolStripMenuItem addItemMenuItem = new ToolStripMenuItem("項目の追加");
             ToolStripMenuItem addFolderMenuItem = new ToolStripMenuItem("フォルダの追加");
             ToolStripMenuItem renameMenuItem = new ToolStripMenuItem("名前の変更");
+            ToolStripMenuItem changeCommandMenuItem = new ToolStripMenuItem("コマンドの変更");
 
-            addItemMenuItem.Click += new EventHandler(AddItemMenuItem_Click);
+            //addItemMenuItem.Click += new EventHandler(AddItemMenuItem_Click);
             addFolderMenuItem.Click += new EventHandler(AddFolderMenuItem_Click);
             renameMenuItem.Click += new EventHandler(RenameMenuItem_Click);
+            changeCommandMenuItem.Click += new EventHandler(ChangeCommandMenuItem_Click);
 
             treeViewContextMenu.Items.AddRange(new ToolStripItem[] { 
-                addItemMenuItem,
+                //addItemMenuItem,
                 addFolderMenuItem, 
                 renameMenuItem,
+                changeCommandMenuItem,
             });
             treeView1.ContextMenuStrip = treeViewContextMenu;
         }
 
+        // コマンドの変更
+        private void ChangeCommandMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = treeView1.SelectedNode;
+            if (selectedNode != null)
+            {
+                using (InputBox inputBox = new InputBox("コマンドを入力してください:", "コマンドの変更", selectedNode.Tag?.ToString()))
+                {
+                    if (inputBox.ShowDialog() == DialogResult.OK)
+                    {
+                        string input = inputBox.InputText;
+                        if (!string.IsNullOrEmpty(input))
+                        {
+                            selectedNode.Tag = input;
+                            //MessageBox.Show("コマンドが変更されました: " + input);
+                        }
+                    }
+                }
+            }
+        }
+
+        // 項目の追加
         private void AddItemMenuItem_Click(object sender, EventArgs e)
         {
             // 項目の追加処理をここに記述
@@ -90,9 +114,10 @@ namespace HawkEye
             //testUsernameNode = new TreeNode(test_username);
             //treeView1.Nodes.Add(testUsernameNode);
 
-            string test_username = Properties.Settings.Default.UserName;
-            testUsernameNode = new TreeNode(test_username);
-            treeView1.Nodes.Add(testUsernameNode);
+            // [UserName]の設定を取得
+            //string test_username = Properties.Settings.Default.UserName;
+            //testUsernameNode = new TreeNode(test_username);
+            //treeView1.Nodes.Add(testUsernameNode);
 
             string serializedTreeView = Properties.Settings.Default.TreeViewData;
             if (!string.IsNullOrEmpty(serializedTreeView))
@@ -119,7 +144,9 @@ namespace HawkEye
         // ノードをシリアライズ
         private void SerializeNode(TreeNode node, StringBuilder sb, int level)
         {
-            sb.AppendLine(new string(' ', level * 2) + node.Text);
+            string tag = node.Tag != null ? node.Tag.ToString() : string.Empty;
+            //sb.AppendLine(new string(' ', level * 2) + node.Text);
+            sb.AppendLine(new string(' ', level * 2) + node.Text + "|" + tag);
             foreach (TreeNode childNode in node.Nodes)
             {
                 SerializeNode(childNode, sb, level + 1);
@@ -135,6 +162,7 @@ namespace HawkEye
         //    Properties.Settings.Default.Save();
         //}
 
+        /*
         private void InitializeTreeView()
         {
             // ノードを追加
@@ -154,6 +182,7 @@ namespace HawkEye
             // 全てのノードを展開
             //treeView1.ExpandAll();
         }
+        */
 
         private void InitializeTreeViewDragAndDrop()
         {
@@ -276,6 +305,7 @@ namespace HawkEye
         //    e.Node.BeginEdit();
         //}
 
+        /*
         // ノードのラベル編集後の処理
         private void treeView1_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
         {
@@ -288,6 +318,7 @@ namespace HawkEye
                 Console.WriteLine("設定に保存" + e.Label);
             }
         }
+        */
 
         // ドラッグがキャンセルされた場合
         private void treeView1_DragLeave(object sender, EventArgs e)
@@ -323,7 +354,10 @@ namespace HawkEye
             {
                 if (string.IsNullOrWhiteSpace(line)) continue;
                 int level = line.TakeWhile(char.IsWhiteSpace).Count() / 2;
-                TreeNode newNode = new TreeNode(line.Trim());
+                string[] parts = line.Trim().Split('|');
+                string text = parts[0];
+                string tag = parts.Length > 1 ? parts[1] : string.Empty;
+                TreeNode newNode = new TreeNode(text) { Tag = tag };
                 if (stack.Count == 0)
                 {
                     treeView.Nodes.Add(newNode);
