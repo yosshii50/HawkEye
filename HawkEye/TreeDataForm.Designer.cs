@@ -51,15 +51,17 @@
             this.textBoxInput.Location = new System.Drawing.Point(0, 0);
             this.textBoxInput.Multiline = true;
             this.textBoxInput.Name = "textBoxInput";
+            this.textBoxInput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBoxInput.Size = new System.Drawing.Size(800, 368);
-            this.textBoxInput.TabIndex = 1;
+            this.textBoxInput.TabIndex = 0;
+            this.textBoxInput.WordWrap = false;
             // 
             // buttonOK
             // 
             this.buttonOK.Location = new System.Drawing.Point(28, 16);
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(107, 45);
-            this.buttonOK.TabIndex = 0;
+            this.buttonOK.TabIndex = 1;
             this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
@@ -69,7 +71,7 @@
             this.buttonCancel.Location = new System.Drawing.Point(665, 16);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(105, 45);
-            this.buttonCancel.TabIndex = 1;
+            this.buttonCancel.TabIndex = 2;
             this.buttonCancel.Text = "キャンセル";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);

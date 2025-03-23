@@ -40,5 +40,13 @@ namespace HawkEye
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
+
+        private void textBoxInput_TextChanged(object sender, EventArgs e)
+        {
+            
+            // 以下のコマンドでブラウザを起動できる。
+            // start chrome --new-window --profile-directory="Profile 17" "https://www.yahoo.co.jp/" "https://www.yahoo.co.jp/"
+
+        }
     }
 }

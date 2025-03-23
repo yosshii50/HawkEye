@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -38,17 +40,20 @@ namespace HawkEye
             ToolStripMenuItem addFolderMenuItem = new ToolStripMenuItem("フォルダの追加");
             ToolStripMenuItem renameMenuItem = new ToolStripMenuItem("名前の変更");
             ToolStripMenuItem changeCommandMenuItem = new ToolStripMenuItem("コマンドの変更");
+            ToolStripMenuItem executeCommandMenuItem = new ToolStripMenuItem("コマンド実行");
 
             //addItemMenuItem.Click += new EventHandler(AddItemMenuItem_Click);
             addFolderMenuItem.Click += new EventHandler(AddFolderMenuItem_Click);
             renameMenuItem.Click += new EventHandler(RenameMenuItem_Click);
             changeCommandMenuItem.Click += new EventHandler(ChangeCommandMenuItem_Click);
+            executeCommandMenuItem.Click += new EventHandler(ExecuteCommandMenuItem_Click);
 
             treeViewContextMenu.Items.AddRange(new ToolStripItem[] { 
                 //addItemMenuItem,
                 addFolderMenuItem, 
                 renameMenuItem,
                 changeCommandMenuItem,
+                executeCommandMenuItem,
             });
             treeView1.ContextMenuStrip = treeViewContextMenu;
         }
@@ -73,6 +78,49 @@ namespace HawkEye
                 }
             }
         }
+
+
+        // コマンド実行
+        private void ExecuteCommandMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode selectedNode = treeView1.SelectedNode;
+            if (selectedNode != null && selectedNode.Tag != null)
+            {
+                string command = selectedNode.Tag.ToString();
+                try
+                {
+                    // コマンドを実行する
+                    //System.Diagnostics.Process.Start(command);
+
+                    // コマンドと引数を分ける
+                    string[] commandParts = Regex.Matches(command, @"[\""].+?[\""]|[^ ]+")
+                                                 .Cast<Match>()
+                                                 .Select(m => m.Value)
+                                                 .ToArray();
+                    string fileName = commandParts[0].Trim('"');
+                    string arguments = commandParts.Length > 1 ? string.Join(" ", commandParts.Skip(1)) : string.Empty;
+
+                    // ProcessStartInfoを使用してプロセスを開始
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        FileName = fileName,
+                        Arguments = arguments
+                    };
+                    System.Diagnostics.Process.Start(startInfo);
+
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("コマンドの実行に失敗しました: " + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("コマンドが設定されていません。");
+            }
+        }
+
 
         // 項目の追加
         private void AddItemMenuItem_Click(object sender, EventArgs e)
