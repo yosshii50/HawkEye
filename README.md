@@ -21,3 +21,6 @@
 
 3. **実行**
    - 解凍したフォルダにある EXE ファイルをダブルクリックして、HawkEye アプリケーションを実行してください。
+
+## Google Chrome のプロファイル一覧取得
+![chrome profile](images/image10_chrome_profile.png)
