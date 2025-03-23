@@ -2,9 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="HawkEye.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="UserName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">SampleName</Value>
-    </Setting>
     <Setting Name="TreeViewData" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>

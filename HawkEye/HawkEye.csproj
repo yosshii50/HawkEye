@@ -134,4 +134,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>powershell -Command "Compress-Archive -Path $(ProjectDir)bin\$(Configuration)\HawkEye.exe, $(ProjectDir)bin\$(Configuration)\Newtonsoft.Json.dll -DestinationPath $(ProjectDir)bin\$(Configuration)\HawkEye.zip"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

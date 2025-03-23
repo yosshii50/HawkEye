@@ -6,6 +6,7 @@ bin/
 !/HawkEye/bin/Debug/HawkEye.exe
 !/HawkEye/bin/Debug/HawkEye.exe.config
 !/HawkEye/bin/Debug/Newtonsoft.Json.dll
+!/HawkEye/bin/Debug/HawkEye.zip
 obj/
 *.user
 *.suo
