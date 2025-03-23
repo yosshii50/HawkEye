@@ -28,7 +28,7 @@ namespace HawkEye
             InitializeContextMenu();
             load_setting();
             this.FormClosing += new FormClosingEventHandler(TreeView_test_FormClosing);
-            //treeView1.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(treeView1_NodeMouseDoubleClick);
+            treeView1.NodeMouseDoubleClick += new TreeNodeMouseClickEventHandler(treeView1_NodeMouseDoubleClick);
             //treeView1.AfterLabelEdit += new NodeLabelEditEventHandler(treeView1_AfterLabelEdit);
         }
 
@@ -81,9 +81,55 @@ namespace HawkEye
 
 
         // コマンド実行
+        private void treeView1_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeNode selectedNode = e.Node;
+            ExecuteCommandNode(selectedNode);
+        }
         private void ExecuteCommandMenuItem_Click(object sender, EventArgs e)
         {
             TreeNode selectedNode = treeView1.SelectedNode;
+            ExecuteCommandNode(selectedNode);
+            /*
+            if (selectedNode != null && selectedNode.Tag != null)
+            {
+                string command = selectedNode.Tag.ToString();
+                try
+                {
+                    // コマンドを実行する
+                    //System.Diagnostics.Process.Start(command);
+
+                    // コマンドと引数を分ける
+                    string[] commandParts = Regex.Matches(command, @"[\""].+?[\""]|[^ ]+")
+                                                 .Cast<Match>()
+                                                 .Select(m => m.Value)
+                                                 .ToArray();
+                    string fileName = commandParts[0].Trim('"');
+                    string arguments = commandParts.Length > 1 ? string.Join(" ", commandParts.Skip(1)) : string.Empty;
+
+                    // ProcessStartInfoを使用してプロセスを開始
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        FileName = fileName,
+                        Arguments = arguments
+                    };
+                    System.Diagnostics.Process.Start(startInfo);
+
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("コマンドの実行に失敗しました: " + ex.Message);
+                }
+            }
+            else
+            {
+                MessageBox.Show("コマンドが設定されていません。");
+            }
+            */
+        }
+        private void ExecuteCommandNode(TreeNode selectedNode)
+        {
             if (selectedNode != null && selectedNode.Tag != null)
             {
                 string command = selectedNode.Tag.ToString();
