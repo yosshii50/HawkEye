@@ -182,5 +182,12 @@ namespace HawkEye
                 }
             }
         }
+
+        private void button_chrome_profile_Click(object sender, EventArgs e)
+        {
+            chrome_profile chrome_profileForm = new chrome_profile();
+            chrome_profileForm.Show();
+
+        }
     }
 }

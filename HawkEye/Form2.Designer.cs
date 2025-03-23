@@ -34,6 +34,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btn_TreeData = new System.Windows.Forms.Button();
+            this.button_chrome_profile = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,6 +79,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button_chrome_profile);
             this.panel1.Controls.Add(this.btn_TreeData);
             this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.button2);
@@ -97,6 +99,16 @@
             this.btn_TreeData.Text = "TreeData";
             this.btn_TreeData.UseVisualStyleBackColor = true;
             this.btn_TreeData.Click += new System.EventHandler(this.btn_TreeData_Click);
+            // 
+            // button_chrome_profile
+            // 
+            this.button_chrome_profile.Location = new System.Drawing.Point(3, 163);
+            this.button_chrome_profile.Name = "button_chrome_profile";
+            this.button_chrome_profile.Size = new System.Drawing.Size(76, 34);
+            this.button_chrome_profile.TabIndex = 7;
+            this.button_chrome_profile.Text = "Chrome\r\nProfile";
+            this.button_chrome_profile.UseVisualStyleBackColor = true;
+            this.button_chrome_profile.Click += new System.EventHandler(this.button_chrome_profile_Click);
             // 
             // Form2
             // 
@@ -120,5 +132,6 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btn_TreeData;
+        private System.Windows.Forms.Button button_chrome_profile;
     }
 }
