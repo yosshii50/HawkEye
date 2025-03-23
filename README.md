@@ -8,10 +8,11 @@
 ## 手順
 
 1. **ダウンロード**
-   - 以下のパスから `[HawkEye.zip](https://github.com/yosshii50/HawkEye/blob/main/HawkEye/bin/Debug/HawkEye.zip)` ファイルをダウンロードしてください:
+   - 以下のパスから `HawkEye.zip` ファイルをダウンロードしてください:
      ```
      HawkEye/bin/Debug/HawkEye.zip
      ```
+    直リンク：[HawkEye.zip](https://github.com/yosshii50/HawkEye/blob/main/HawkEye/bin/Debug/HawkEye.zip)
 
 2. **解凍**
    - ダウンロードが完了したら、`HawkEye.zip` ファイルを解凍します。
