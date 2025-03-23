@@ -67,6 +67,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TreeDataForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TreeDataForm.Designer.cs">
+      <DependentUpon>TreeDataForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TreeView_test.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,6 +101,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TreeDataForm.resx">
+      <DependentUpon>TreeDataForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TreeView_test.resx">
       <DependentUpon>TreeView_test.cs</DependentUpon>
     </EmbeddedResource>

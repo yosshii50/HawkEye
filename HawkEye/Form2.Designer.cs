@@ -33,6 +33,7 @@
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.button3 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btn_TreeData = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,6 +78,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.btn_TreeData);
             this.panel1.Controls.Add(this.button3);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.button1);
@@ -85,6 +87,16 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(85, 543);
             this.panel1.TabIndex = 6;
+            // 
+            // btn_TreeData
+            // 
+            this.btn_TreeData.Location = new System.Drawing.Point(3, 123);
+            this.btn_TreeData.Name = "btn_TreeData";
+            this.btn_TreeData.Size = new System.Drawing.Size(76, 34);
+            this.btn_TreeData.TabIndex = 6;
+            this.btn_TreeData.Text = "TreeData";
+            this.btn_TreeData.UseVisualStyleBackColor = true;
+            this.btn_TreeData.Click += new System.EventHandler(this.btn_TreeData_Click);
             // 
             // Form2
             // 
@@ -107,5 +119,6 @@
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Button btn_TreeData;
     }
 }

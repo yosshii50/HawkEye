@@ -45,7 +45,7 @@ namespace HawkEye
             public IntPtr HWnd { get; set; }
         }
 
-        private int LastWinCount = 0; // 最後のウィンドウ数
+        //private int LastWinCount = 0; // 最後のウィンドウ数
 
         public static List<WindowInfo> GetVisibleWindows()
         {

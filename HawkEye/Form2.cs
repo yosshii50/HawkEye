@@ -162,5 +162,25 @@ namespace HawkEye
             TreeView_test treeViewForm = new TreeView_test();
             treeViewForm.Show();
         }
+
+        private void btn_TreeData_Click(object sender, EventArgs e)
+        {
+            using (TreeDataForm treeDataForm = new TreeDataForm())
+            {
+                if (treeDataForm.ShowDialog() == DialogResult.OK)
+                {
+                    /*
+                    string inputData = treeDataForm.InputText;
+                    if (!string.IsNullOrEmpty(inputData))
+                    {
+                        DeserializeTreeView(treeView1, inputData);
+                        Properties.Settings.Default.TreeViewData = inputData;
+                        Properties.Settings.Default.Save();
+                        MessageBox.Show("ツリーデータが更新されました。");
+                    }
+                    */
+                }
+            }
+        }
     }
 }
